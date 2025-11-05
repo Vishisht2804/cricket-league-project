@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Stats - Cricket League</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="stadium-bg">
+    <div class="nav-bar">
+        <h2>📈 Player & Team Stats</h2>
+        <div>
+            <a href="/dashboard" class="btn">🏠 Dashboard</a>
+            <a href="/logout" class="btn danger">Logout</a>
+        </div>
+    </div>
+
+    <div class="form-card">
+        {% if stats.error %}
+        <p class="msg">Error: {{ stats.error }}</p>
+        {% else %}
+        <h3>Top Players</h3>
+        <ul>
+            {% if stats.top_scorer %}
+            <li>Top Scorer: <b>{{ stats.top_scorer.player }}</b> — {{ stats.top_scorer.runs }} runs</li>
+            {% endif %}
+            {% if stats.top_bowler %}
+            <li>Top Wicket-taker: <b>{{ stats.top_bowler.player }}</b> — {{ stats.top_bowler.wickets }} wickets</li>
+            {% endif %}
+            {% if stats.top_boundaries %}
+            <li>Most Boundaries: <b>{{ stats.top_boundaries.player }}</b> — {{ stats.top_boundaries.boundaries }}</li>
+            {% endif %}
+        </ul>
+
+        <h3>Top Teams by Aggregated Runs</h3>
+        <ol>
+            {% for t in stats.top_teams_by_runs %}
+            <li>{{ t.team }} — {{ t.runs }} runs</li>
+            {% endfor %}
+        </ol>
+        {% endif %}
+
+        <a href="/dashboard" class="btn">⬅ Back</a>
+    </div>
+</body>
+</html>

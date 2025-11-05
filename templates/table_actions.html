@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Table - {{ table_name }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="stadium-bg">
+    <div class="nav-bar">
+        <h2>Table: {{ table_name }}</h2>
+        <div>
+            <a href="/dashboard" class="btn">🏠 Dashboard</a>
+            <a href="/viewdb/{{ table_name }}" class="btn">View Database</a>
+            <a href="/logout" class="btn danger">Logout</a>
+        </div>
+    </div>
+
+    <div class="form-card">
+        <h3>Choose an operation</h3>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <a href="/table/{{ table_name }}/insert" class="btn">Create</a>
+            <a href="/table/{{ table_name }}/read" class="btn">Read</a>
+            <a href="/table/{{ table_name }}/update" class="btn">Update</a>
+            <a href="/table/{{ table_name }}/delete" class="btn danger">Delete</a>
+        </div>
+
+        <a href="/dashboard" class="btn" style="display:inline-block; margin-top:30px;">⬅ Back to Dashboard</a>
+    </div>
+</body>
+</html>

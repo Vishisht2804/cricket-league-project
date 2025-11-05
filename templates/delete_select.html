@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Delete - {{ table_name }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="stadium-bg">
+<div class="form-card">
+    <h2>Delete from <b>{{ table_name }}</b></h2>
+
+    <form method="POST" style="margin-bottom:20px;">
+        <label>Select {{ pk }}:</label>
+        <select name="selected_id" required>
+            {% for v in pk_rows %}
+            <option value="{{ v }}">{{ v }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Continue</button>
+    </form>
+
+    <h3>Or select directly from the table</h3>
+    <div class="table-scroll">
+        <table>
+            <tr>
+                {% for col in columns %}
+                <th>{{ col }}</th>
+                {% endfor %}
+                <th>Action</th>
+            </tr>
+            {% for row in rows %}
+            <tr>
+                {% for cell in row %}
+                <td>{{ cell }}</td>
+                {% endfor %}
+                <td>
+                    <form method="POST" style="margin:0;">
+                        <input type="hidden" name="selected_id" value="{{ row[0] }}">
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <a href="/table/{{ table_name }}" class="btn">⬅ Back</a>
+</div>
+</body>
+</html>

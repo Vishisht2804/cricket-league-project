@@ -14,13 +14,92 @@
         </div>
     </div>
 
-    <h3>Select a Table to Insert Data</h3>
+    <h3>Select a Table</h3>
     <div class="table-container">
         {% for t in tables %}
-        <a href="/insert/{{ t }}" class="table-card">
+        <a href="/table/{{ t }}" class="table-card">
             <h4>{{ t }}</h4>
         </a>
         {% endfor %}
     </div>
+
+    <hr style="margin: 40px 0; border-color: #666;">
+
+    <h3>📊 Player Statistics</h3>
+
+<!-- FLEX container for 3 stat boxes -->
+<div style="display:flex; justify-content:center; gap:25px; flex-wrap:wrap; margin-top:20px;">
+
+    <!-- MOST RUNS -->
+    <div class="form-card" style="flex:1; min-width:250px; max-width:350px;">
+        <h4 style="cursor:pointer; color:#f1c40f; text-align:center;" onclick="toggleRows('runs')">
+            Most Runs ▼
+        </h4>
+        <table style="width:100%; margin-top:10px; border-collapse:collapse;">
+            <tr><th>Player</th><th>Runs</th></tr>
+            {% for player, runs in stats['runs'] %}
+            <tr class="runs-row {% if loop.index > 5 %}hidden{% endif %}">
+                <td>{{ player }}</td>
+                <td>{{ runs }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <!-- MOST WICKETS -->
+    <div class="form-card" style="flex:1; min-width:250px; max-width:350px;">
+        <h4 style="cursor:pointer; color:#f1c40f; text-align:center;" onclick="toggleRows('wickets')">
+            Most Wickets ▼
+        </h4>
+        <table style="width:100%; margin-top:10px; border-collapse:collapse;">
+            <tr><th>Player</th><th>Wickets</th></tr>
+            {% for player, wkts in stats['wickets'] %}
+            <tr class="wickets-row {% if loop.index > 5 %}hidden{% endif %}">
+                <td>{{ player }}</td>
+                <td>{{ wkts }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <!-- MOST BOUNDARIES -->
+    <div class="form-card" style="flex:1; min-width:250px; max-width:350px;">
+        <h4 style="cursor:pointer; color:#f1c40f; text-align:center;" onclick="toggleRows('boundaries')">
+            Most Boundaries ▼
+        </h4>
+        <table style="width:100%; margin-top:10px; border-collapse:collapse;">
+            <tr><th>Player</th><th>Boundaries</th></tr>
+            {% for player, b in stats['boundaries'] %}
+            <tr class="boundaries-row {% if loop.index > 5 %}hidden{% endif %}">
+                <td>{{ player }}</td>
+                <td>{{ b }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+</div>
+
+<script>
+function toggleRows(category) {
+    const rows = document.querySelectorAll('.' + category + '-row');
+    let hiddenExists = false;
+    rows.forEach(row => { if (row.classList.contains('hidden')) hiddenExists = true; });
+    rows.forEach((row, idx) => {
+        if (idx >= 5) {
+            if (hiddenExists) {
+                row.classList.remove('hidden');
+                row.style.display = 'table-row';
+            } else {
+                row.classList.add('hidden');
+                row.style.display = 'none';
+            }
+        }
+    });
+}
+</script>
+<style>.hidden { display:none; }</style>
+
+
 </body>
 </html>

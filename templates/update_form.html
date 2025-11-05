@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit - {{ table_name }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="stadium-bg">
+<div class="form-card">
+    <h2>Edit <b>{{ table_name }}</b> ({{ pk }}={{ row[pk] if row and pk in row else '' }})</h2>
+    <form method="POST">
+        <input type="hidden" name="action" value="do_update">
+        <input type="hidden" name="selected_id" value="{{ row[pk] if row and pk in row else '' }}">
+        {% for col in columns %}
+        <div style="margin-bottom:8px;">
+            <label style="display:block;">{{ col.Field }}</label>
+            <input type="text" name="{{ col.Field }}" value="{{ row[col.Field] if row and col.Field in row else '' }}">
+        </div>
+        {% endfor %}
+        <button type="submit">Save Changes</button>
+    </form>
+    <a href="/table/{{ table_name }}" class="btn" style="display:inline-block; margin-top:160px;">⬅ Back</a>
+</div>
+</body>
+</html>
