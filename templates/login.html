@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cricket League DBMS - Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="stadium-bg">
+    <div class="login-card">
+        <h1>🏏 Cricket League Database</h1>
+        <form method="POST">
+            <input type="text" name="user" placeholder="MySQL Username" required>
+            <input type="password" name="password" placeholder="MySQL Password" required>
+            <button type="submit">Login</button>
+        </form>
+        {% if message %}
+        <p class="msg">{{ message }}</p>
+        {% endif %}
+    </div>
+</body>
+</html>

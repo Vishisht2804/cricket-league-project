@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tables - Cricket League DB</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<h2>📋 Select a Table to Insert Data</h2>
+<ul class="table-list">
+    {% for t in tables %}
+    <li><a href="/insert/{{ t }}">{{ t }}</a></li>
+    {% endfor %}
+</ul>
+<a href="/logout" class="btn">Logout</a>
+</body>
+</html>

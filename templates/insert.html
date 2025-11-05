@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Insert Data</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h2>Insert Data</h2>
+    <form method="POST">
+        <label>Table Name:</label>
+        <input type="text" name="table" required>
+
+        <label>Values (comma separated):</label>
+        <input type="text" name="data" placeholder="'1','Virat Kohli','RCB'" required>
+
+        <button type="submit">Insert</button>
+    </form>
+    {% if message %}
+    <p class="msg">{{ message }}</p>
+    {% endif %}
+    <a href="/">⬅ Back</a>
+</body>
+</html>

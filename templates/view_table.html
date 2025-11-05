@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Database - Cricket League DB</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="stadium-bg">
+    <div class="nav-bar">
+        <h2>📊 View Cricket League Database</h2>
+        <div>
+            <a href="/dashboard" class="btn">🏠 Dashboard</a>
+            <a href="/logout" class="btn danger">Logout</a>
+        </div>
+    </div>
+
+    {% if tables %}
+    <h3>Select a Table to View</h3>
+    <div class="table-container">
+        {% for t in tables %}
+        <a href="/viewdb/{{ t }}" class="table-card">
+            <h4>{{ t }}</h4>
+        </a>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if selected_table %}
+    <div class="query-card">
+        <h2>Table: {{ selected_table }}</h2>
+        <div class="table-scroll">
+            <table>
+                <tr>
+                    {% for col in columns %}
+                    <th>{{ col }}</th>
+                    {% endfor %}
+                </tr>
+                {% for row in rows %}
+                <tr>
+                    {% for cell in row %}
+                    <td>{{ cell }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+    {% endif %}
+</body>
+</html>

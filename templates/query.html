@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SQL Query - Cricket League DB</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="pitch-bg">
+    <div class="nav-bar">
+        <h2>⚙️ SQL Query Console</h2>
+        <div>
+            <a href="/dashboard" class="btn">🏠 Dashboard</a>
+            <a href="/logout" class="btn danger">Logout</a>
+        </div>
+    </div>
+
+    <div class="query-card">
+        <form method="POST">
+            <textarea name="sql" rows="5" placeholder="Enter your SQL query here...">{{ query_text }}</textarea><br>
+            <button type="submit">Run Query</button>
+        </form>
+
+        {% if message %}
+        <p class="msg">{{ message }}</p>
+        {% endif %}
+
+        {% if result %}
+        <div class="table-scroll">
+        <table>
+            <tr>
+                {% for col in columns %}
+                <th>{{ col }}</th>
+                {% endfor %}
+            </tr>
+            {% for row in result %}
+            <tr>
+                {% for cell in row %}
+                <td>{{ cell }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </table>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

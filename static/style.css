@@ -1,0 +1,135 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #0b2e13, #081c0c);
+    background-size: cover;
+    min-height: 100vh;
+}
+
+.stadium-bg {
+    background: url('https://i.imgur.com/yRT3zvM.jpg') no-repeat center center/cover;
+}
+
+.pitch-bg {
+    background: url('https://i.imgur.com/tT8jM8D.jpg') no-repeat center center/cover;
+}
+
+.nav-bar {
+    background: rgba(0, 0, 0, 0.75);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    border-bottom: 2px solid gold;
+}
+
+.nav-bar h2 {
+    color: #ffd700;
+    text-shadow: 0 0 8px #ffea00;
+}
+
+.login-card, .form-card, .query-card {
+    background: rgba(0, 0, 0, 0.8);
+    padding: 25px;
+    margin: 80px auto;
+    width: 80%;
+    max-width: 600px;
+    border-radius: 15px;
+    box-shadow: 0 0 15px #ffd700;
+}
+
+.login-card input, .form-card input, textarea {
+    width: 90%;
+    padding: 10px;
+    margin: 8px;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+    font-size: 16px;
+}
+
+button, .btn {
+    background: #ffd700;
+    color: #000;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    border: none;
+    text-decoration: none;
+}
+
+button:hover, .btn:hover {
+    background: #ffea4d;
+    transform: scale(1.05);
+}
+
+.btn.danger {
+    background: #e74c3c;
+    color: white;
+}
+
+.btn.danger:hover {
+    background: #ff4f4f;
+}
+
+.table-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 40px;
+}
+
+.table-card {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid gold;
+    padding: 20px;
+    margin: 15px;
+    width: 200px;
+    border-radius: 12px;
+    text-decoration: none;
+    color: #ffd700;
+    transition: 0.3s;
+    text-align: center;
+}
+
+.table-card:hover {
+    background: gold;
+    color: black;
+    transform: scale(1.1);
+}
+
+.table-scroll {
+    overflow-x: auto;
+    max-height: 500px;
+}
+
+table {
+    border-collapse: collapse;
+    margin: 20px auto;
+    width: 90%;
+    color: black;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+th {
+    background: #ffd700;
+    color: black;
+    padding: 10px;
+}
+
+td {
+    padding: 8px;
+    text-align: center;
+}
+
+.msg {
+    color: #ffea4d;
+    font-weight: bold;
+    margin-top: 10px;
+}
