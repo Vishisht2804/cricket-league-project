@@ -6,19 +6,33 @@
 </head>
 <body class="stadium-bg">
 <div class="form-card">
-    <h2>Create record in <b>{{ table_name }}</b></h2>
+    <h2>Create Record in <b>{{ table_name }}</b></h2>
+
     <form method="POST">
         {% for col in columns %}
-        <div class="input-row" style="margin-bottom:8px;">
-            <label style="display:block;">{{ col.Field }}</label>
-            <input type="text" name="{{ col.Field }}" placeholder="{{ col.Type }}">
+        <div class="input-row" style="margin-bottom:16px;">
+            <label style="display:block; font-weight:500;">{{ col.Field }}</label>
+
+            {% if col.EnumValues %}
+                <!-- Dropdown for ENUM -->
+                <select name="{{ col.Field }}" class="form-control">
+                    <option value="">-- Select --</option>
+                    {% for val in col.EnumValues %}
+                        <option value="{{ val }}">{{ val }}</option>
+                    {% endfor %}
+                </select>
+            {% else %}
+                <!-- Normal text input -->
+                <input type="text" name="{{ col.Field }}" placeholder="{{ col.Type }}" class="form-control">
+            {% endif %}
         </div>
         {% endfor %}
+
         <button type="submit">Insert Record</button>
     </form>
 
     {% if message %}
-    <p class="msg">{{ message }}</p>
+        <p class="msg">{{ message }}</p>
     {% endif %}
 
     <a href="/table/{{ table_name }}" class="btn" style="display:inline-block; margin-top:25px;">⬅ Back</a>
