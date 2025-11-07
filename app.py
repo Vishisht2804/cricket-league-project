@@ -341,13 +341,107 @@ def view_database():
 def view_table(table_name):
     conn = get_connection()
     cursor = conn.cursor()
-    query = f"SELECT * FROM {table_name}"
+
+    # Joined / formatted queries (restoring the original behavior)
+    queries = {
+        "STANDINGS": """
+            SELECT 
+                ROW_NUMBER() OVER (ORDER BY S.points DESC, S.net_run_rate DESC) AS 'Rank',
+                T.team_name AS 'Team',
+                S.matches_played AS 'Matches Played',
+                S.wins AS 'Wins',
+                S.losses AS 'Losses',
+                S.ties AS 'Ties',
+                S.points AS 'Points',
+                S.net_run_rate AS 'Net Run Rate'
+            FROM STANDINGS S
+            JOIN TEAMS T ON S.team_id = T.team_id
+            ORDER BY S.points DESC, S.net_run_rate DESC;
+        """,
+
+        "PLAYER_STATS": """
+            SELECT 
+                P.player_name AS 'Player',
+                P.role AS 'Role',
+                PS.runs_scored AS 'Runs',
+                PS.wickets_taken AS 'Wickets',
+                PS.boundaries AS 'Boundaries',
+                T.team_name AS 'Team'
+            FROM PLAYER_STATS PS
+            JOIN PLAYERS P ON PS.player_id = P.player_id
+            JOIN TEAMS T ON P.team_id = T.team_id
+            ORDER BY Runs DESC;
+        """,
+
+        "MATCH_RESULTS": """
+            SELECT 
+                MR.result_id AS 'Result ID',
+                M.match_id AS 'Match ID',
+                H.team_name AS 'Home Team',
+                A.team_name AS 'Away Team',
+                W.team_name AS 'Winner',
+                P.player_name AS 'Man of the Match'
+            FROM MATCH_RESULTS MR
+            JOIN MATCHES M ON MR.match_id = M.match_id
+            JOIN TEAMS H ON M.home_team_id = H.team_id
+            JOIN TEAMS A ON M.away_team_id = A.team_id
+            LEFT JOIN TEAMS W ON MR.winner_team_id = W.team_id
+            JOIN PLAYERS P ON MR.man_of_the_match = P.player_id;
+        """,
+
+        "MATCHES": """
+            SELECT 
+                M.match_id AS 'Match ID',
+                H.team_name AS 'Home Team',
+                A.team_name AS 'Away Team',
+                M.status AS 'Status',
+                M.match_type AS 'Type',
+                M.match_date AS 'Date',
+                V.venue_name AS 'Venue'
+            FROM MATCHES M
+            JOIN TEAMS H ON M.home_team_id = H.team_id
+            JOIN TEAMS A ON M.away_team_id = A.team_id
+            JOIN VENUES V ON M.venue_id = V.venue_id
+            ORDER BY M.match_date;
+        """,
+
+        "PLAYERS_CONTACTS": """
+            SELECT 
+                P.player_name AS 'Player',
+                PC.contact_no AS 'Contact',
+                T.team_name AS 'Team'
+            FROM PLAYERS_CONTACTS PC
+            JOIN PLAYERS P ON PC.player_id = P.player_id
+            JOIN TEAMS T ON P.team_id = T.team_id;
+        """,
+
+        "PLAYERS": """
+            SELECT player_name AS 'Player', DOB, role AS 'Role', batting_style AS 'Batting', bowling_style AS 'Bowling', T.team_name AS 'Team'
+            FROM PLAYERS P
+            JOIN TEAMS T ON P.team_id = T.team_id;
+        """,
+
+        "TEAMS": """
+            SELECT team_name AS 'Team', coach_name AS 'Coach', home_city AS 'City'
+            FROM TEAMS;
+        """,
+
+        "VENUES": """
+            SELECT venue_name AS 'Venue', city AS 'City', capacity AS 'Capacity'
+            FROM VENUES;
+        """
+    }
+
+    query = queries.get(table_name.upper(), f"SELECT * FROM {table_name};")
     cursor.execute(query)
     rows = cursor.fetchall()
     columns = [desc[0] for desc in cursor.description]
+
     cursor.close()
     conn.close()
+
     return render_template('view_table.html', tables=None, selected_table=table_name, columns=columns, rows=rows)
+
 
 # ------------------- SQL QUERY EXECUTION -------------------
 @app.route('/query', methods=['GET', 'POST'])
