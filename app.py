@@ -53,8 +53,18 @@ def login():
             conn = mysql.connector.connect(host="localhost", user=user, password=password)
             cursor = conn.cursor()
             cursor.execute("USE cricket_league;")
+
+# Determine role based on MySQL user
+            cursor.execute("SELECT CURRENT_USER();")
+            current_user = cursor.fetchone()[0]
+            if current_user.startswith("viewer"):
+                session['role'] = "viewer"
+            else:
+                session['role'] = "manager"
+
             session['user'] = user
             session['password'] = password
+
             cursor.close()
             conn.close()
             return redirect('/dashboard')
@@ -109,11 +119,15 @@ def dashboard():
 # ------------------- TABLE ACTIONS -------------------
 @app.route('/table/<table_name>')
 def table_actions(table_name):
+    if session.get('role') == "viewer":
+        return render_template("error.html", message="❌ Access Denied (Read-Only User)")
     return render_template('table_actions.html', table_name=table_name)
 
 # ------------------- READ -------------------
 @app.route('/table/<table_name>/read')
 def table_read(table_name):
+    if session.get('role') == "viewer":
+        return render_template("error.html", message="❌ Access Denied (Read-Only User)")
     conn = get_connection()
     cursor = conn.cursor()
     try:
@@ -133,6 +147,9 @@ def table_read(table_name):
 # ------------------- INSERT -------------------
 @app.route('/table/<table_name>/insert', methods=['GET', 'POST'])
 def table_insert(table_name):
+    if session.get('role') == "viewer":
+        return render_template("error.html", message="❌ Access Denied (Read-Only User)")
+    
     conn = get_connection()
     cursor = conn.cursor(dictionary=True)
     cursor.execute(f"DESCRIBE {table_name};")
@@ -176,8 +193,12 @@ def table_insert(table_name):
                 placeholders.append("%s")
                 fields_to_insert.append(col_name)
 
-            insert_query = f"INSERT INTO {table_name} ({', '.join(fields_to_insert)}) VALUES ({', '.join(placeholders)})"
-            cursor.execute(insert_query, values)
+            if table_name.upper() == "PLAYER_STATS":
+                # values order: player_id, runs_scored, wickets_taken, boundaries
+                cursor.execute("CALL add_or_update_player_stats(%s, %s, %s, %s)", values)
+            else:
+                insert_query = f"INSERT INTO {table_name} ({', '.join(fields_to_insert)}) VALUES ({', '.join(placeholders)})"
+                cursor.execute(insert_query, values)
             conn.commit()
             message = "✅ Record inserted successfully!"
         except mysql.connector.Error as e:
@@ -191,6 +212,8 @@ def table_insert(table_name):
 # ------------------- UPDATE -------------------
 @app.route('/table/<table_name>/update', methods=['GET', 'POST'])
 def table_update(table_name):
+    if session.get('role') == "viewer":
+        return render_template("error.html", message="❌ Access Denied (Read-Only User)")
     conn = get_connection()
     cursor = conn.cursor(dictionary=True)
     cursor.execute(f"DESCRIBE {table_name};")
@@ -277,6 +300,8 @@ def table_update(table_name):
 # ------------------- DELETE -------------------
 @app.route('/table/<table_name>/delete', methods=['GET', 'POST'])
 def table_delete(table_name):
+    if session.get('role') == "viewer":
+        return render_template("error.html", message="❌ Access Denied (Read-Only User)")
     conn = get_connection()
     cursor = conn.cursor(dictionary=True)
     cursor.execute(f"DESCRIBE {table_name};")

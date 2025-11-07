@@ -14,7 +14,8 @@
         </div>
     </div>
 
-    <h3>Select a Table</h3>
+    {% if session['role'] == 'manager' %}
+    <h3>Select a Table to Insert Data</h3>
     <div class="table-container">
         {% for t in tables %}
         <a href="/table/{{ t }}" class="table-card">
@@ -22,6 +23,8 @@
         </a>
         {% endfor %}
     </div>
+    {% endif %}
+
 
     <hr style="margin: 40px 0; border-color: #666;">
 
